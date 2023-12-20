@@ -51,6 +51,8 @@ export const authConfig: any = {
   },
   pages: {
       signIn: '/signin',
+    signOut: '/',
+    error: '/'
   }
 }
 

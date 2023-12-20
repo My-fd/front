@@ -15,19 +15,11 @@ import { ErrorMessage } from "@hookform/error-message"
 const SIGN_IN = 'SignIn',
     SIGN_UP = 'SignUp'
 
-const DUMMY = {defaultValues:{
-    nickname: '12',
-    email: '12@mail.ru',
-    password: '121212',
-    password_confirmation: '121212',
-    // email: "a@test.ru",
-    // password: "1",
-  }}
 
 const SignInForm = () => {
   const  router = useRouter()
   const searchParams = useSearchParams()
-  const formContext = useForm<{name: string;}>(DUMMY);
+  const formContext = useForm<{name: string;}>();
   const { handleSubmit, clearErrors, reset, setError} = formContext;
   const [tab, setTab] = useState('');
 
@@ -35,7 +27,7 @@ const SignInForm = () => {
       setTab(SIGN_UP)
   }, [])
 
-  const handleSubmitt = async (data,a,b) => {
+  const validAction = async (data) => {
 
     const {email} = data
     const opt = { ...data, login: email,  redirect: false}
@@ -56,12 +48,11 @@ const SignInForm = () => {
     }
   };
 
-  const validAction = formData => handleSubmitt(formData)
  const invalidAction = (err, e) => {console.log('invalidAction', err, e )}
 
   return  (<Paper sx={{margin: '48px auto', width: '400px'}}>
         {!!tab && <div>
-          <FormContainer FormProps={{onChange: (e,a) => clearErrors()}} name={'testForm'} formContext={formContext} handleSubmit={handleSubmit((data, e) => validAction(data), (err, e) => invalidAction(err, e))}>
+          <FormContainer FormProps={{onChange: () => clearErrors()}} formContext={formContext} handleSubmit={handleSubmit((data, e) => validAction(data), (err, e) => invalidAction(err, e))}>
             <Tabs aria-label="basic tabs example" variant="fullWidth" value={tab}
                   onChange={(e, v) => {reset({});setTab(v); }}>
               <Tab label="Вход" value={SIGN_IN}/>

@@ -4,7 +4,7 @@ import {amber} from '@mui/material/colors';
 const Theme: ThemeOptions = {
   breakpoints: {
     values: {
-      xs: 420,
+      xs: 320,
       sm: 525,
       md: 767,
       lg: 992,

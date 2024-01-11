@@ -1,0 +1,1 @@
+export const profilePaperSx: any = {margin: '24px auto', padding: 4, width: {xs: '100%', md: '400px'}}

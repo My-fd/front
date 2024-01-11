@@ -45,7 +45,7 @@ const DesktopHeader = (props) => {
     }, [user])
 
     return (
-            <AppBar position="static" sx={{ background: '#fff', flexWrap:'wrap', alignContent: 'space-between'}} >
+            <AppBar position="absolute" sx={{ background: '#fff', flexWrap:'wrap', alignContent: 'space-between'}} >
                 <Stack direction={'row'} alignItems={'center'} width={'100%'} justifyContent={"space-around"}>
                 <Toolbar  sx={{maxWidth:Theme.breakpoints?.values.lg, width:'100%', padding: 0}} >
                     <Logo size={40}/>
@@ -82,11 +82,10 @@ const DesktopHeader = (props) => {
                                 {ROUTES.signin.label}
                             </Typography>
                         </Button></Link>}
-                        {isLoggedin && <Button size="medium" aria-label="Имя" color="secondary"
-                                               onClick={() => signOut({ callbackUrl: ROUTES.main.path })}>
+                        {isLoggedin && <Link href={ROUTES.profile.path}><Button size="medium" aria-label="Имя" color="secondary">
                             <AccountCircleOutlinedIcon/>
                             {isTablet && <Typography variant="button">{user?.name}</Typography>}
-                        </Button>}
+                        </Button></Link>}
                     </Stack>}
                     {!isMobile && <Button variant="contained" size="small" sx={{maxHeight: 36, minWidth: 210}} color={'secondary'}>Разместить
                         объявление</Button>}

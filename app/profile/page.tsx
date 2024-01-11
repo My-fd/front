@@ -1,16 +1,20 @@
 import { authConfig } from "../../configs/auth";
 import { getServerSession } from "next-auth/next";
+import {Hidden, Paper} from "@mui/material";
+import {Profile} from "../_components/Profile/Profile";
+import {Logout} from "../_components/Logout";
+import {profilePaperSx} from "../../styles/styles";
 
 type ISession = {
     user?: any
 }
 
-export default async function Profile() {
+export default async function ProfilePage() {
   const session: ISession = await getServerSession<any>(authConfig);
 
-  return (
-    <div>
-      <h1>Profile of {session?.user?.name || session?.user?.nickname}</h1>
-    </div>
-  );
+  return <>
+      <Profile session={session}/>
+      <Hidden mdUp><Paper sx={profilePaperSx}><Logout/></Paper></Hidden>
+  </>;
 }
+

@@ -15,7 +15,6 @@ export const authConfig: any = {
         return postRequest({credentials, path: process.env.API_PATH_SIGNIN})
       }
     }),
-
     Credentials({
       id: 'signUp',
       name: 'signUp',

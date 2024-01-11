@@ -50,7 +50,7 @@ const SignInForm = () => {
 
  const invalidAction = (err, e) => {console.log('invalidAction', err, e )}
 
-  return  (<Paper sx={{margin: '48px auto', width: '400px'}}>
+  return  (<Paper sx={{margin: '48px auto', width: '100%', maxWidth: '400px'}}>
         {!!tab && <div>
           <FormContainer FormProps={{onChange: () => clearErrors()}} formContext={formContext} handleSubmit={handleSubmit((data, e) => validAction(data), (err, e) => invalidAction(err, e))}>
             <Tabs aria-label="basic tabs example" variant="fullWidth" value={tab}
@@ -73,8 +73,8 @@ const SignInForm = () => {
 
 export { SignInForm };
 
-const fieldsDataProps = {
-  name: {...VALIDATABL_EFIELDS_PROPS.name , validation: VALIDATION_RULES.name},
+const fieldsDataProps:any = {
+  nickname: {...VALIDATABL_EFIELDS_PROPS.nickname , validation: VALIDATION_RULES.nickname},
   email: {...VALIDATABL_EFIELDS_PROPS.email, validation: VALIDATION_RULES.email},
   pass: {...VALIDATABL_EFIELDS_PROPS.pass, required: true},
   passR: {...VALIDATABL_EFIELDS_PROPS.passR, required: true},

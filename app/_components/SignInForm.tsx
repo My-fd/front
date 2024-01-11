@@ -24,7 +24,7 @@ const SignInForm = () => {
   const [tab, setTab] = useState('');
 
   useEffect(()=>{
-      setTab(SIGN_UP)
+      setTab(SIGN_IN)
   }, [])
 
   const validAction = async (data) => {
@@ -100,7 +100,7 @@ const SignUp = ({formContext}) => {
   const {formState: {errors, isValid}} = formContext
 
   return <div>
-    <TextFieldElement {...fieldsDataProps.name} {...fieldsViewProps} fullWidth />
+    <TextFieldElement {...fieldsDataProps.nickname} {...fieldsViewProps} fullWidth />
     <TextFieldElement {...fieldsDataProps.email} {...fieldsViewProps} fullWidth />
     <PasswordElement {...fieldsDataProps.pass} {...fieldsViewProps} fullWidth />
     <PasswordRepeatElement {...fieldsDataProps.passR} passwordFieldName={fieldsDataProps.pass.name} {...fieldsViewProps} fullWidth />

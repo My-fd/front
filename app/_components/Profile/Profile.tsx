@@ -79,11 +79,6 @@ const Profile = (props) => {
             })
     };
 
-    const onPhoneChange = () => {
-        const name:any = phone
-        clearErrors(name)
-    }
-
     const invalidAction = (err, e) => {console.log('invalidAction', err, e )}
     const {name, surname, patronymic, about, email, phone, country_code, city, nickname} = user;
     return  (<Paper sx={profilePaperSx}>
@@ -109,7 +104,7 @@ const Profile = (props) => {
                     <TextFieldElement {...fieldsDataProps.surname} {...fieldsViewProps} fullWidth />
                     <TextFieldElement {...fieldsDataProps.about} multiline {...fieldsViewProps} fullWidth />
                     <TextFieldElement {...fieldsDataProps.email} {...fieldsViewProps} fullWidth />
-                    <TextFieldElement {...fieldsDataProps.phone} {...fieldsViewProps} fullWidth onChange={ () => onPhoneChange()}/>
+                    <TextFieldElement {...fieldsDataProps.phone} {...fieldsViewProps} fullWidth onChange={ (name:any='phone') => clearErrors(name)}/>
                     <TextFieldElement {...fieldsDataProps.city} {...fieldsViewProps} fullWidth/>
                     <Box  style={{position: 'relative'}}  >
                         <Button variant='outlined' sx={{marginBottom: 2}} onClick={()=>{

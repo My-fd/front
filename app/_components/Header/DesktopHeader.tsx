@@ -20,13 +20,15 @@ import Theme from "../../../styles/theme/theme";
 import {Logo} from "../../_elements/logo";
 import {ROUTES} from "../../../configs/routs";
 import {useEffect, useState} from "react";
-import {FIELDS_NAMES} from "../../_constants/fieldsNames";
+import {NAVIGATION_FIELDS_NAMES} from "../../_constants/fieldsNames";
 
 interface IUser {
     id: string;
     name: string;
     nickname: string;
 }
+
+const { favorites ,notice ,messages ,cart } = NAVIGATION_FIELDS_NAMES;
 
 const DesktopHeader = (props) => {
     const [user, setUser] = useState<IUser>();
@@ -87,8 +89,9 @@ const DesktopHeader = (props) => {
                             {isTablet && <Typography variant="button">{user?.name}</Typography>}
                         </Button></Link>}
                     </Stack>}
-                    {!isMobile && <Button variant="contained" size="small" sx={{maxHeight: 36, minWidth: 210}} color={'secondary'}>Разместить
-                        объявление</Button>}
+                    {!isMobile && <Link href={ROUTES.myAds.path + ROUTES.create.path}>
+                        <Button variant="contained" size="small" sx={{maxHeight: 36, minWidth: 210}} color={'secondary'}>Разместить объявление</Button>
+                    </Link>}
                 </Toolbar>
                 </Stack>
             </AppBar>
@@ -96,11 +99,10 @@ const DesktopHeader = (props) => {
 }
 
 export { DesktopHeader };
-
-const Favorite = () =>  <DesktopNavigationIconButton {...{ count: 9, type: FIELDS_NAMES.favorites}}/>
-const Notice = () =>    <DesktopNavigationIconButton {...{ count: 4, type: FIELDS_NAMES.notice}}/>
-const Messages = () =>  <DesktopNavigationIconButton {...{ count: 7, type: FIELDS_NAMES.messages}}/>
-const Cart = () =>      <DesktopNavigationIconButton {...{ count: 200, type: FIELDS_NAMES.cart}}/>
+const Favorite = () =>  <DesktopNavigationIconButton {...{ count: 9, type: favorites}}/>
+const Notice = () =>    <DesktopNavigationIconButton {...{ count: 4, type: notice}}/>
+const Messages = () =>  <DesktopNavigationIconButton {...{ count: 7, type: messages}}/>
+const Cart = () =>      <DesktopNavigationIconButton {...{ count: 200, type: cart}}/>
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
     color: theme.palette.secondary.main,

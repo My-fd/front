@@ -1,5 +1,7 @@
-export default async function MyAds() {
+import {AdsList} from "../_components/Ads/AdsList";
+
+export default async function MyAdsPage() {
   return (
-      <h1>Мои объявления</h1>
+      <AdsList/>
   );
 }

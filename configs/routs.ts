@@ -1,37 +1,40 @@
-import {FIELDS_NAMES} from "../app/_constants/fieldsNames";
+import {NAVIGATION_FIELDS_NAMES} from "../app/_constants/fieldsNames";
 
 export const ROUTES = {
-    [FIELDS_NAMES.main]: {
+    [NAVIGATION_FIELDS_NAMES.main]: {
         path: '/',
         label: 'Главная'
     },
-    [FIELDS_NAMES.profile]:{
-        path: `/${[FIELDS_NAMES.profile]}`,
+    [NAVIGATION_FIELDS_NAMES.profile]:{
+        path: `/${[NAVIGATION_FIELDS_NAMES.profile]}`,
         // path: '/',
         label: 'Профиль'
     },
-    [FIELDS_NAMES.signin]:{
-        path: `/${[FIELDS_NAMES.signin]}`,
+    [NAVIGATION_FIELDS_NAMES.signin]:{
+        path: `/${[NAVIGATION_FIELDS_NAMES.signin]}`,
         label: 'Вход/Регистрация'
     },
-    [FIELDS_NAMES.favorites]:{
-        path: `/${[FIELDS_NAMES.favorites]}`,
+    [NAVIGATION_FIELDS_NAMES.favorites]:{
+        path: `/${[NAVIGATION_FIELDS_NAMES.favorites]}`,
         label:'Избранное'
     },
-    [FIELDS_NAMES.cart]:{
-        path: `/${[FIELDS_NAMES.cart]}`,
+    [NAVIGATION_FIELDS_NAMES.cart]:{
+        path: `/${[NAVIGATION_FIELDS_NAMES.cart]}`,
         label:'Корзина'
     },
-    [FIELDS_NAMES.messages]:{
-        path: `/${[FIELDS_NAMES.messages]}`,
+    [NAVIGATION_FIELDS_NAMES.messages]:{
+        path: `/${[NAVIGATION_FIELDS_NAMES.messages]}`,
         label:'Сообщения'
     },
-    [FIELDS_NAMES.notice]:{
-        path: `/${[FIELDS_NAMES.notice]}`,
+    [NAVIGATION_FIELDS_NAMES.notice]:{
+        path: `/${[NAVIGATION_FIELDS_NAMES.notice]}`,
         label:'Уведомления'
     },
-    [FIELDS_NAMES.myAds]:{
-        path: `/${[FIELDS_NAMES.myAds]}`,
-        label:'Мои объявления'
+    [NAVIGATION_FIELDS_NAMES.myAds]:{
+        path: `/${[NAVIGATION_FIELDS_NAMES.myAds]}`,
+        label:'Мои объявления',
+    },
+    [NAVIGATION_FIELDS_NAMES.create]:{
+        path: `/${[NAVIGATION_FIELDS_NAMES.create]}`,
     },
 }

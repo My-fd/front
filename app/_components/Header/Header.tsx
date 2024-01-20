@@ -22,7 +22,7 @@ const Header = () => {
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
     useEffect(()=>{
-        setUser({...data?.user, name: (data?.user?.name || data?.user?.nickname)})
+        setUser({...data?.user, name: (data?.user?.nickname || data?.user?.name )})
     }, [data])
 
     useEffect(() => {

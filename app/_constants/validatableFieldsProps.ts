@@ -1,14 +1,20 @@
 export const VALIDATABL_EFIELDS_PROPS:any = {
-    nickname:   {   name: 'nickname',               type: '',       label: 'Никнейм',          helperText: ' '},
-    name:       {   name: 'name',                   type: '',       label: 'Имя',              helperText: ' '},
-    surname:    {   name: 'surname',                type: '',       label: 'Фамилия',          helperText: ' '},
-    patronymic: {   name: 'patronymic',             type: '',       label: 'Отчество',         helperText: ' '},
-    about:      {   name: 'about',                  type: '',       label: 'О себе',           helperText: ' '},
-    email:      {   name: 'email',                  type: 'email',  label: 'Почта',            helperText: ' '},
-    pass:       {   name: 'password',               type: '',       label: 'Пароль',           helperText: ' '},
-    passR:      {   name: 'password_confirmation',  type: '',       label: 'Повторите пароль', helperText: ' '},
-    phone:      {   name: 'phone',                  type: '',       label: 'Телефон',          helperText: ' '},
-    city:       {   name: 'city',                   type: '',       label: 'Город',            helperText: ' '},
+    nickname:      {   name: 'nickname',               label: 'Никнейм',                    helperText: ' ', type: '',       },
+    name:          {   name: 'name',                   label: 'Имя',                        helperText: ' ', type: '',       },
+    surname:       {   name: 'surname',                label: 'Фамилия',                    helperText: ' ', type: '',       },
+    patronymic:    {   name: 'patronymic',             label: 'Отчество',                   helperText: ' ', type: '',       },
+    about:         {   name: 'about',                  label: 'О себе',                     helperText: ' ', type: '',       },
+    email:         {   name: 'email',                  label: 'Почта',                      helperText: ' ', type: 'email',  },
+    pass:          {   name: 'password',               label: 'Пароль',                     helperText: ' ', type: '',       },
+    passR:         {   name: 'password_confirmation',  label: 'Повторите пароль',           helperText: ' ', type: '',       },
+    phone:         {   name: 'phone',                  label: 'Телефон',                    helperText: ' ', type: '',       },
+    city:          {   name: 'city',                   label: 'Город',                      helperText: ' ', type: '',       },
+    adName:        {   name: 'title',                  label: 'Название',                   helperText: ' ', type: '',       },
+    adCategory:    {   name: 'category_id',            label: 'Категория',                  helperText: ' ', type: '',       },
+    adSubCategory: {   name: 'subcategory_id',         label: 'Подкатегория',               helperText: ' ', type: '',       },
+    adDescription: {   name: 'description',            label: 'Описание',                   helperText: ' ', type: '',       },
+    adPrice:       {   name: 'price',                  label: 'Цена',                       helperText: ' ', type: 'number', },
+    adShipment:    {   name: 'shipment',               label: 'Пересылка в другой город',   helperText: ' ' },
 }
 
 const maxLength = 64, aboutLength = 1024, emailLength = 255;
@@ -72,9 +78,49 @@ export const VALIDATION_RULES:any = {
             value: 100,
             message: "Название города не должно быть длиннее 100 символов"
         }},
+    adName:{
+        required: true,
+        maxLength: {
+            value: 100,
+            message: "Название объявления не должно быть длиннее 100 символов"
+        }
+    },
+    adCategory:{
+        required: true,
+    },
+    adSubCategory:{
+        required: true,
+    },
+    adDescription:{
+        required: true,
+        maxLength: {
+            value: 5000,
+            message: "Описание объявления не должно быть длиннее 5000 символов"
+        }
+    },
+    adPrice:{
+        maxLength: {
+            value: 10,
+            message: "Описание объявления не должно быть длиннее 5000 символов"
+        }},
+    adShipment:{}
+}
 
+const FIELDS_DEFAULT_VALUES = {
+    adShipment: true
 }
 
 export const VALIDATION_ERRORS_MESSAGES = {
     required:'Это поле обязательно для заполнения',
+}
+
+export function getFieldsConfig(fields=[], options={validationRules: {}}){
+    let config = {serverNames:{}, fieldsConfig:{}, defaultValues:{}}
+    fields.map(f => {
+        const severName = VALIDATABL_EFIELDS_PROPS[f].name
+        config.serverNames[f] = severName
+        config.defaultValues[severName] = FIELDS_DEFAULT_VALUES[f]
+        config.fieldsConfig[f] = {...VALIDATABL_EFIELDS_PROPS[f], validation: VALIDATION_RULES[f], ...options.validationRules}
+    })
+    return config
 }

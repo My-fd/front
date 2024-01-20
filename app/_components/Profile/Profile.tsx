@@ -32,8 +32,6 @@ const Profile = (props) => {
     const { handleSubmit, clearErrors, formState: {errors, isValid}, setError, setValue} = formContext;
     const [editProfile, setEditProfile] = useState(false);
     const [user, setUser] = useState<any>({});
-    useEffect(()=>{
-    }, [])
 
     useEffect(()=>{
         setUser(session?.user)
@@ -116,7 +114,7 @@ const Profile = (props) => {
                             disabled={!!_.keys(errors).length && !isValid}
                             variant='contained' type={'submit'} color={'primary'} size={"large"} fullWidth> сохранить </Button>
                         <ErrorMessage errors={errors} name={formName} render={({ message }) =>{
-                            return <Typography  color={'error'}  variant="caption" display="block" gutterBottom> {!!_.keys(errors).length && !isValid ? message : '123'}</Typography>}}/>
+                            return <Typography  color={'error'}  variant="caption" display="block" gutterBottom> {!!_.keys(errors).length && !isValid ? message : ''}</Typography>}}/>
                     </Box>
                 </FormContainer>}
         </Paper>

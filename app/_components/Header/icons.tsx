@@ -11,36 +11,36 @@ import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import {AddCircleRounded} from "@mui/icons-material";
 import {Logo} from "../../_elements/logo";
-import {FIELDS_NAMES} from "../../_constants/fieldsNames";
+import {NAVIGATION_FIELDS_NAMES} from "../../_constants/fieldsNames";
 import {ROUTES} from "../../../configs/routs";
 
 const menuItems = {
-    [FIELDS_NAMES.main]:{
-        ...ROUTES[FIELDS_NAMES.main],
+    [NAVIGATION_FIELDS_NAMES.main]:{
+        ...ROUTES[NAVIGATION_FIELDS_NAMES.main],
         icon: <Logo size={24}/>
     },
-    [FIELDS_NAMES.favorites]:{
-        ...ROUTES[FIELDS_NAMES.favorites],
+    [NAVIGATION_FIELDS_NAMES.favorites]:{
+        ...ROUTES[NAVIGATION_FIELDS_NAMES.favorites],
         icon: <FavoriteBorderOutlinedIcon color='secondary'/>
     },
-    [FIELDS_NAMES.notice]:{
-        ...ROUTES[FIELDS_NAMES.notice],
+    [NAVIGATION_FIELDS_NAMES.notice]:{
+        ...ROUTES[NAVIGATION_FIELDS_NAMES.notice],
         icon: <NotificationsNoneOutlinedIcon color='secondary'/>
     },
-    [FIELDS_NAMES.myAds]:{
-        ...ROUTES[FIELDS_NAMES.myAds],
+    [NAVIGATION_FIELDS_NAMES.myAds]:{
+        ...ROUTES[NAVIGATION_FIELDS_NAMES.myAds],
         icon: <AddCircleRounded color='secondary' sx={{fontSize: '30px'}}/>
     },
-    [FIELDS_NAMES.messages]:{
-        ...ROUTES[FIELDS_NAMES.messages],
+    [NAVIGATION_FIELDS_NAMES.messages]:{
+        ...ROUTES[NAVIGATION_FIELDS_NAMES.messages],
         icon: <EmailOutlinedIcon color='secondary'/>
     },
-    [FIELDS_NAMES.profile]:{
-        ...ROUTES[FIELDS_NAMES.profile],
+    [NAVIGATION_FIELDS_NAMES.profile]:{
+        ...ROUTES[NAVIGATION_FIELDS_NAMES.profile],
         icon: <AccountCircleOutlinedIcon color='secondary'/>
     },
-    [FIELDS_NAMES.cart]:{
-        ...ROUTES[FIELDS_NAMES.cart],
+    [NAVIGATION_FIELDS_NAMES.cart]:{
+        ...ROUTES[NAVIGATION_FIELDS_NAMES.cart],
         icon: <ShoppingCartOutlinedIcon color='secondary'/>
     },
 }

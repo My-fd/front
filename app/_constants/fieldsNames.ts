@@ -1,4 +1,4 @@
-export const FIELDS_NAMES={
+export const NAVIGATION_FIELDS_NAMES={
     favorites: 'favorites',
     main: 'main',
     myAds: 'myAds',
@@ -7,4 +7,5 @@ export const FIELDS_NAMES={
     cart: 'cart',
     notice: 'notice',
     signin: 'signin',
+    create: 'create',
 }

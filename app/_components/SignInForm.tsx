@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import {ROUTES} from "../../configs/routs";
-import {FIELDS_NAMES} from "../_constants/fieldsNames";
+import {NAVIGATION_FIELDS_NAMES} from "../_constants/fieldsNames";
 import {useForm} from "react-hook-form";
 import { FormContainer, PasswordElement, PasswordRepeatElement, TextFieldElement } from 'react-hook-form-mui'
 import {Box, Button, Divider, Paper, Stack, Tab, Tabs, Typography} from "@mui/material";
@@ -39,7 +39,7 @@ const SignInForm = () => {
     }
 
     if (res && !res.error) {
-      const goTo  = searchParams.get('callbackUrl') || ROUTES[FIELDS_NAMES.profile].path
+      const goTo  = searchParams.get('callbackUrl') || ROUTES[NAVIGATION_FIELDS_NAMES.profile].path
       router.push(goTo);
     } else {
       setError('root.serverError', {

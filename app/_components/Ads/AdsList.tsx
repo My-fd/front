@@ -9,7 +9,7 @@ const AdsList = () => {
     const [ads, setAds] = useState([]);
 
     useEffect(()=>{
-        API.getAds({})
+        API.getAds()
             .then(({ data }) => {
                 setAds(data.data.data);
                 return data.response;

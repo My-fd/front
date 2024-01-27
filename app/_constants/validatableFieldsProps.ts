@@ -115,7 +115,7 @@ export const VALIDATION_ERRORS_MESSAGES = {
 }
 
 export function getFieldsConfig(fields=[], options={validationRules: {}}){
-    let config = {serverNames:{}, fieldsConfig:{}, defaultValues:{}}
+    let config = <any>{serverNames:{}, fieldsConfig:{}, defaultValues:{}}
     fields.map(f => {
         const severName = VALIDATABL_EFIELDS_PROPS[f].name
         config.serverNames[f] = severName

@@ -28,13 +28,13 @@ const fieldsDataConfig:any = {
 
 const fieldsViewProps = { sx: {marginBottom: 2, minHeight: 80}}
 
-const formName:any = 'profileForm'
+const formName:any = 'editAdForm'
 
-const EditAd = ({ad={}, update= false}) => {
-    const { data: sessionData } = useSession()
+const EditAd = ({ad={}, update= false}:any) => {
+    const { data: sessionData }:any = useSession()
     const  router = useRouter()
     const [categories, setCategories] = useState([]);
-    const formContext = useForm<{name: string;}>({defaultValues: {...FORM_CONFIG.defaultValues, ...ad, category_id:ad.category.id}});
+    const formContext = useForm<any>({defaultValues: {...FORM_CONFIG.defaultValues, ...ad, category_id:ad?.category?.id}});
     const { handleSubmit, clearErrors, formState: {errors, isValid}, setError, setValue, getValues} = formContext;
 
     useEffect(()=>{
@@ -99,7 +99,7 @@ const EditAd = ({ad={}, update= false}) => {
 };
 
 export { EditAd };
-const iconSize = 24;
+const iconSize = '24';
 const CategoriesIcons = {
     1: <WigIcon fill={'#7862E4'} height={iconSize} width={iconSize}/>,
     2: <CostumeIcon fill={'#7862E4'} height={iconSize} width={iconSize}/>,
@@ -134,7 +134,7 @@ const SelectCategory = (props) => {
                 setValue(b || null)
             },
             renderOption:(a,b) => {
-                return (<Stack {...a} sx={{alignItems: 'flex-start'}} direction={"row"} spacing={1}>
+                return (<Stack {...a as any} sx={{alignItems: 'flex-start'}} direction={"row"} spacing={1}>
                     <Box>{CategoriesIcons[b] || <div style={{height: iconSize, width: iconSize}}></div>}</Box>
                     <Box>{c[b]?.name}</Box>
                 </Stack>);

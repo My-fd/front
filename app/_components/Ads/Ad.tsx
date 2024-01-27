@@ -10,9 +10,21 @@ import {API} from "../../api/api";
 import {useSession} from "next-auth/react";
 import {useState} from "react";
 
-const Ad = ({ad={}}) => {
-    const {title, description, price, id} = ad
-    const { data: sessionData } = useSession()
+interface IAd{
+    title:string;
+    description: string ;
+    price: string | number;
+    id: string | number
+}
+
+interface IProps{
+    ad:IAd;
+}
+
+const Ad = (props:IProps) => {
+    const {title, description, price, id} = props.ad;
+    // const { data: sessionData } = useSession()
+    const { data: sessionData }:any = useSession<any>()
     const [deleted, setDeleted] = useState(false);
 
     const removeAd = () =>{
@@ -24,7 +36,7 @@ const Ad = ({ad={}}) => {
 
     return (!deleted ? <Paper sx={{...profilePaperSx}}>
         <Typography variant="h4" gutterBottom>
-            <Link href={ROUTES.myAds.path  + '/' + ad.id}>{title}</Link>
+            <Link href={ROUTES.myAds.path  + '/' + id}>{title}</Link>
             <Link href={ROUTES.myAds.path  + '/' + id + '/edit'} >
                 <EditIcon/>
             </Link>

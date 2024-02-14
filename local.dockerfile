@@ -1,4 +1,4 @@
-FROM node:19-alpine AS build
+FROM node:20.11.0-bookworm AS build
 
 COPY ./local-entrypoint.sh /app/
 

@@ -36,7 +36,7 @@ const EditAd = ({ad={}, update= false}:any) => {
     const { data: sessionData }:any = useSession()
     const  router = useRouter()
     const [categories, setCategories] = useState<any>([]);
-    const formContext = useForm<any>({defaultValues: {...createAd, ...FORM_CONFIG.defaultValues, ...ad, category_id:ad?.category?.id}});
+    const formContext = useForm<any>({defaultValues: { ...FORM_CONFIG.defaultValues, ...ad, category_id:ad?.category?.id}});
     const { handleSubmit, clearErrors, formState: {errors, isValid}, setError, setValue, trigger,getValues, watch} = formContext;
     const watchCategory = watch(FORM_CONFIG.fieldsConfig.adCategory.name);
     const watchSubcategory = watch(FORM_CONFIG.fieldsConfig.adSubCategory.name);

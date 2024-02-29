@@ -15,7 +15,7 @@ import {useSession} from "next-auth/react";
 import {ROUTES} from "../../../configs/routs";
 import {NAVIGATION_FIELDS_NAMES} from "../../_constants/fieldsNames";
 import {useRouter} from "next/navigation";
-import {createAd} from "../../../data/dummies";
+// import {createAd} from "../../../data/dummies";
 
 
 const FORM_FIELDS_NAMES = ['city', 'adName', 'adCategory', 'adSubCategory', 'adDescription', 'adPrice']

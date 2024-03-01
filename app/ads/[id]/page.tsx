@@ -12,5 +12,5 @@ export default async function Page({ params: {id} }: { params: { id: number |  s
             return notFound();
         })
 
-    return <Ad ad={{...ad.data}}/>
+    return <Ad ad={{...ad.data, isAd: true}}/>
 }

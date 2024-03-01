@@ -1,3 +1,4 @@
+import {AdsList} from "./_components/Ads/AdsList";
 export default function Home() {
-  return <h1>Это главная страница сайта fundom</h1>;
+  return <AdsList/>
 }

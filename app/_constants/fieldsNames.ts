@@ -1,7 +1,8 @@
 export const NAVIGATION_FIELDS_NAMES={
     favorites: 'favorites',
     main: 'main',
-    myAds: 'myAds',
+    myAds: 'my',
+    ads: 'ads',
     messages: 'messages',
     profile: 'profile',
     cart: 'cart',

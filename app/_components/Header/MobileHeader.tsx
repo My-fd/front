@@ -15,7 +15,7 @@ const MobileHeader = ({user}) => {
                 <Stack direction={'row'} alignItems={'flex-end'} justifyContent={'space-between'} width='100%'>
                     <MobileNavigationIconButton mobile type={NAVIGATION_FIELDS_NAMES.main} />
                     <MobileNavigationIconButton mobile count='200' type={NAVIGATION_FIELDS_NAMES.favorites} />
-                    <MobileNavigationIconButton mobile type={NAVIGATION_FIELDS_NAMES.myAds}/>
+                    <MobileNavigationIconButton mobile type={NAVIGATION_FIELDS_NAMES.create}/>
                     <MobileNavigationIconButton mobile count='10' type={NAVIGATION_FIELDS_NAMES.messages} />
                     <MobileNavigationIconButton mobile type={NAVIGATION_FIELDS_NAMES.profile} name={user?.name}/>
                 </Stack>

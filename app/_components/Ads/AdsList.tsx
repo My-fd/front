@@ -1,13 +1,13 @@
 "use client";
 
 import {useEffect, useState} from "react";
-import {Stack} from "@mui/material";
+import {Grid} from "@mui/material";
 import {API} from "../../api/api";
 import {Ad} from "./Ad";
 
-const AdsList = () => {
+const AdsList = (props) => {
     const [ads, setAds] = useState([]);
-
+    const {isMy} = props
     useEffect(()=>{
         API.getAds()
             .then(({ data }) => {
@@ -19,9 +19,11 @@ const AdsList = () => {
             })
     }, []);
 
-    return  <Stack spacing={2} alignItems={"center"}>
-        {!!ads.length && ads.map(ad=>( <Ad key={ad.id} ad={ad}/>))}
-            </Stack>
+    return <Grid container rowSpacing={4} justifyContent={'start'}>
+            {!!ads.length && ads.map(ad=>(<Grid item xs={12} md={6} lg={4}>
+                <Ad key={ad.id} ad={{...ad,  isMy}}/>
+            </Grid>))}
+        </Grid>
 };
 
 export { AdsList };

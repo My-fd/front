@@ -27,8 +27,8 @@ const menuItems = {
         ...ROUTES[NAVIGATION_FIELDS_NAMES.notice],
         icon: <NotificationsNoneOutlinedIcon color='secondary'/>
     },
-    [NAVIGATION_FIELDS_NAMES.myAds]:{
-        ...ROUTES[NAVIGATION_FIELDS_NAMES.myAds],
+    [NAVIGATION_FIELDS_NAMES.create]:{
+        ...ROUTES[NAVIGATION_FIELDS_NAMES.create],
         icon: <AddCircleRounded color='secondary' sx={{fontSize: '30px'}}/>
     },
     [NAVIGATION_FIELDS_NAMES.messages]:{

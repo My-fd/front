@@ -50,7 +50,7 @@ const DesktopHeader = (props) => {
             <AppBar position="absolute" sx={{ background: '#fff', flexWrap:'wrap', alignContent: 'space-between'}} >
                 <Stack direction={'row'} alignItems={'center'} width={'100%'} justifyContent={"space-around"}>
                 <Toolbar  sx={{maxWidth:Theme.breakpoints?.values.lg, width:'100%', padding: 0}} >
-                    <Logo size={40}/>
+                    <Link href={ROUTES.main.path}><Logo size={40}/></Link>
                     <ClickAwayListener onClickAway={() => setIsSearching(false)}>
                         {<Stack width={isSearching && '100%'}>
                             {<Collapse collapsedSize={100} timeout={500} sx={{ minHeight: 40, '.MuiCollapse-wrapperInner': {width: '100%'}, width: '100%!important'}} orientation="horizontal" in={!!isSearching}>
@@ -89,7 +89,7 @@ const DesktopHeader = (props) => {
                             {isTablet && <Typography variant="button">{user?.name}</Typography>}
                         </Button></Link>}
                     </Stack>}
-                    {!isMobile && <Link href={ROUTES.myAds.path + ROUTES.create.path}>
+                    {!isMobile && <Link href={ROUTES.create.path}>
                         <Button variant="contained" size="small" sx={{maxHeight: 36, minWidth: 210}} color={'secondary'}>Разместить объявление</Button>
                     </Link>}
                 </Toolbar>

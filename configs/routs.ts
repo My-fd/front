@@ -30,11 +30,21 @@ export const ROUTES = {
         path: `/${[NAVIGATION_FIELDS_NAMES.notice]}`,
         label:'Уведомления'
     },
-    [NAVIGATION_FIELDS_NAMES.myAds]:{
-        path: `/${[NAVIGATION_FIELDS_NAMES.myAds]}`,
+    myAds:{
+        path: `/${[NAVIGATION_FIELDS_NAMES.ads]}/${[NAVIGATION_FIELDS_NAMES.myAds]}`,
         label:'Мои объявления',
     },
+    ads:{
+        path: `/${[NAVIGATION_FIELDS_NAMES.ads]}`,
+        label:'Мои объявления',
+        my:{
+            path: `/${[NAVIGATION_FIELDS_NAMES.ads]}/${[NAVIGATION_FIELDS_NAMES.myAds]}`,
+            label:'Мои объявления',
+        },
+        create:{path: `/${[NAVIGATION_FIELDS_NAMES.create]}`}
+    },
     [NAVIGATION_FIELDS_NAMES.create]:{
-        path: `/${[NAVIGATION_FIELDS_NAMES.create]}`,
+        path: `/${[NAVIGATION_FIELDS_NAMES.ads]}/${[NAVIGATION_FIELDS_NAMES.create]}`,
+        label: 'Создать объявление'
     },
 }

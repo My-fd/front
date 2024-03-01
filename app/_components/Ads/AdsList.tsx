@@ -20,8 +20,8 @@ const AdsList = (props) => {
     }, []);
 
     return <Grid container rowSpacing={4} justifyContent={'start'}>
-            {!!ads.length && ads.map(ad=>(<Grid item xs={12} md={6} lg={4}>
-                <Ad key={ad.id} ad={{...ad,  isMy}}/>
+            {!!ads.length && ads.map(ad=>(<Grid key={ad.id} item xs={12} md={6} lg={4}>
+                <Ad ad={{...ad,  isMy}}/>
             </Grid>))}
         </Grid>
 };

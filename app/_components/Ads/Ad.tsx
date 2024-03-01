@@ -44,7 +44,8 @@ const Ad = (props:IProps) => {
     const baseSize = 300;
     const photoSize = {xs: '100vw', md: baseSize }
     const categoryIconSize = 50,
-        categoryIconStyles = {position:'absolute', bottom: -categoryIconSize/2, left: categoryIconSize/2, background:'#fff', borderRadius: categoryIconSize, border: `2px solid ${theme.palette.primary.main}`,width: categoryIconSize, height:categoryIconSize, padding: '5px'}
+        categoryIconStyles = {position:'absolute', bottom: -categoryIconSize/2, left: categoryIconSize/2, background:'#fff',
+            borderRadius: categoryIconSize, border: `2px solid ${theme.palette.primary['main']}`,width: categoryIconSize, height:categoryIconSize, padding: '5px'}
 
     return (!deleted ? <Paper sx={{width:cardWidth, maxWidth: baseSize, marginX: 'auto'}}>
         <Box sx={{maxWidth: baseSize, maxHeight: baseSize, width:photoSize, height:photoSize, position:'relative', background: '#ddd', marginX:'auto'}}>
@@ -54,7 +55,7 @@ const Ad = (props:IProps) => {
             </Box>
         </Box>
         <Box padding={4}>
-            <Box ызф  sx={{ minHeight: !isAd ? 100 : 0, mb: !isAd ? 0 : 2}}>
+            <Box sx={{ minHeight: !isAd ? 100 : 0, mb: !isAd ? 0 : 2}}>
             <NextLink href={(isMy ? ROUTES.myAds.path : ROUTES.ads.path)  + '/' + id}>
                 <Typography variant="button" gutterBottom sx={{color:'#222', fontWeight: 800, pb: 6}}>
                     {title}

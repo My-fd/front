@@ -80,23 +80,24 @@ const EditAd = ({ad={}, update= false}:any) => {
     const validAction = async (data) => {
         const {token} = sessionData?.user
         const attrs = _.transform(data[ATTRIBUTES], (r ,v,k)=> {
-            if (v) r.push({'attribute_id': k, 'value': v})
+            if (v) r.push({[k]: v})
             return r
         },[])
         const serverData = {..._.pick(data, _.concat(_.values(FORM_CONFIG.serverNames), 'id')),
-            // [ATTRIBUTES]:attrs,
+            [ATTRIBUTES]:attrs,
             token}
 
         // return true
         const res = update ? API.updateAd(serverData): API.createAd(serverData);
-        res.then(({ data }) => {
-                const goTo = ROUTES[NAVIGATION_FIELDS_NAMES.myAds].path
+        res.then(({data}) => {
+                const goTo = ROUTES.myAds.path
                 router.push(goTo);
-            return data.response;
+            return data.data;
         })
             .catch((res) => {
                 const {response} = res
                 let errors = [] ;
+                // if (!response) return
                 errors = [{name: formName, message: response.data.message}]
                 if (response.status == 401) errors = [{name: formName, message: 'Ошибка авторизации. Попробуйте обновить страницу' }]
                 if (response.status == 422) errors = _.map(_.toPairs(response.data.errors),(i:Array<any>) => ({name:i[0],  message: _.flatten(i[1]) }))

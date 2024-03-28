@@ -9,6 +9,7 @@ export const API_CONFIG = {
     updateAd: '/listings',
     deleteAd: '/listings',
     getAds: '/listings',
+    getMyAds: '/listings/my',
     getAd: '/listings',
 }
 
@@ -41,6 +42,10 @@ export const API = {
     },
     getAds: function (){
         return getRequest(API_CONFIG.getAds)
+    },
+    getMyAds: function (data){
+        return getRequest(API_CONFIG.getMyAds,
+            {headers: {Authorization: 'Bearer ' + data?.token}})
     },
     getAd: async function (id){
         const res = await  getRequest(API_CONFIG.getAd+'/'+id)

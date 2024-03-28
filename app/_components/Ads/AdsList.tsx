@@ -2,26 +2,21 @@
 
 import {useEffect, useState} from "react";
 import {Grid} from "@mui/material";
-import {API} from "../../api/api";
 import {Ad} from "./Ad";
 
 const AdsList = (props) => {
-    const [ads, setAds] = useState([]);
-    const {isMy} = props
-    useEffect(()=>{
-        API.getAds()
-            .then(({ data }) => {
-                setAds(data.data.data);
-                return data.response;
-            })
-            .catch((res) => {
-                console.log('ошибка загрузки списка объявлений')
-            })
-    }, []);
+    const [ads, setAds] = useState(props.ads);
+    const {session, filters} = props
+
+    useEffect(() => {
+        if (!filters) return
+        //здесь мы будем запрашивать объявления с учетом фильтров выбраных пользователем и передавать результат в setAds
+        setAds([])
+    }, [filters]);
 
     return <Grid container rowSpacing={4} justifyContent={'start'}>
             {!!ads.length && ads.map(ad=>(<Grid key={ad.id} item xs={12} md={6} lg={4}>
-                <Ad ad={{...ad,  isMy}}/>
+                <Ad ad={{...ad,  isMy: !!session}}/>
             </Grid>))}
         </Grid>
 };

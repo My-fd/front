@@ -50,8 +50,8 @@ export const authConfig: any = {
   },
   pages: {
       signIn: '/signin',
-    signOut: '/',
-    error: '/'
+    signOut: (process.env.API_URL || '') + '/',
+    error: (process.env.API_URL || '') + '/'
   }
 }
 

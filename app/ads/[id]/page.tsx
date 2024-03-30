@@ -1,5 +1,5 @@
 import {API} from "../../api/api";
-import {Ad} from "../../_components/Ads/Ad";
+import {AdPage} from "../../_components/Ads/AdPage";
 import { notFound } from 'next/navigation';
 
 export default async function Page({ params: {id} }: { params: { id: number |  string } }) {
@@ -12,5 +12,5 @@ export default async function Page({ params: {id} }: { params: { id: number |  s
             return notFound();
         })
 
-    return <Ad ad={{...ad.data, isAd: true}}/>
+    return <AdPage ad={{...ad.data, isAd: true}}/>
 }

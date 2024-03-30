@@ -2,7 +2,7 @@
 
 import {useEffect, useState} from "react";
 import {Grid} from "@mui/material";
-import {Ad} from "./Ad";
+import {AdCard} from "./AdCard";
 
 const AdsList = (props) => {
     const [ads, setAds] = useState(props.ads);
@@ -16,7 +16,7 @@ const AdsList = (props) => {
 
     return <Grid container rowSpacing={4} justifyContent={'start'}>
             {!!ads.length && ads.map(ad=>(<Grid key={ad.id} item xs={12} md={6} lg={4}>
-                <Ad ad={{...ad,  isMy: !!session}}/>
+                <AdCard ad={{...ad,  isMy: !!session}}/>
             </Grid>))}
         </Grid>
 };

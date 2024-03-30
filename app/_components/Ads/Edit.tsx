@@ -4,8 +4,8 @@ import _ from "lodash";
 import {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message"
-import {FormContainer, AutocompleteElement, TextFieldElement, CheckboxElement} from 'react-hook-form-mui'
-import {Box, Button, Paper, Stack, Step, StepLabel, Stepper, Typography} from "@mui/material";
+import {FormContainer, AutocompleteElement, TextFieldElement, CheckboxElement, SliderElement} from 'react-hook-form-mui'
+import {Box, Button, Chip, Paper, Stack, Step, StepLabel, Stepper, Typography} from "@mui/material";
 import { getFieldsConfig, VALIDATABL_EFIELDS_PROPS } from "../../_constants/validatableFieldsProps";
 import {API} from "../../api/api";
 import {profilePaperSx} from "../../../styles/styles";
@@ -22,13 +22,13 @@ const FORM_FIELDS_NAMES = ['city', 'adName', 'adCategory', 'adSubCategory', 'adD
 const ATTRIBUTES = 'attributes'
 const FORM_CONFIG = {..._.merge({},
     getFieldsConfig(FORM_FIELDS_NAMES, {validationRules: {required: true}}),
-    getFieldsConfig(['adShipment']))
+    getFieldsConfig(['adShipment','adShipmentCity','adShipmentRu', 'adShipmentSng','adShipmentW']))
 }
 const fieldsDataConfig:any = {
     ...FORM_CONFIG.fieldsConfig,
 }
 
-const fieldsViewProps = { sx: {marginBottom: 2, minHeight: 80}}
+const fieldsViewProps = {sx: {marginBottom: 2, minHeight: 80}}
 
 const formName:any = 'editAdForm'
 
@@ -37,7 +37,7 @@ const EditAd = ({ad={}, update= false}:any) => {
     const  router = useRouter()
     const [categories, setCategories] = useState<any>([]);
     const formContext = useForm<any>({defaultValues: { ...FORM_CONFIG.defaultValues, ...ad, category_id:ad?.category?.id}});
-    const { handleSubmit, clearErrors, formState: {errors, isValid}, setError, setValue, trigger,getValues, watch} = formContext;
+    const { handleSubmit, clearErrors, formState: {errors, isValid}, setError, setValue, trigger,getValues, watch, reset} = formContext;
     const watchCategory = watch(FORM_CONFIG.fieldsConfig.adCategory.name);
     const watchSubcategory = watch(FORM_CONFIG.fieldsConfig.adSubCategory.name);
     const [attributes, setAttributes] = useState([]);
@@ -51,7 +51,7 @@ const EditAd = ({ad={}, update= false}:any) => {
                     if(!i.parent_id) cat[i.id] = {...(cat[i.id]||{}), ...i}
                     if(!!i.parent_id) cat[i.parent_id].subcategories = _.concat((cat[i.parent_id].subcategories || []), i)
                 })
-                setCategories(_.values(cat))
+                // setCategories(_.values(cat))
 
                 setCategories(cat)
                 return data.response;
@@ -117,14 +117,18 @@ const EditAd = ({ad={}, update= false}:any) => {
     const [activeStep, setActiveStep] = React.useState(0);
 
     const handleNext = () => {
+
+        // console.log('getValues()', getValues('attributes'))
+
         trigger()
         if(isValid) {
             setActiveStep((prevActiveStep) => prevActiveStep + 1)
-            clearErrors()
-        };
+            reset(undefined, { keepDirtyValues: true });
+        }
     };
 
     const handleBack = () => {
+        reset(undefined, { keepDirtyValues: true });
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
@@ -151,32 +155,21 @@ const EditAd = ({ad={}, update= false}:any) => {
                         <TextFieldElement {...fieldsDataConfig.adName} {...fieldsViewProps} fullWidth/>
                         <SelectCategory {...{
                         fieldsData: fieldsDataConfig.adCategory,
+                        textFieldProps: { valueKey: 'id', labelKey: 'name' },
                         fieldsViewProps, formContext,
                         options: categories,
                         val: getValues(fieldsDataConfig.adCategory.name)
                     }}/>
                     {!!subcategories?.length && <SelectCategory {...{
                         fieldsData: fieldsDataConfig.adSubCategory,
+                        textFieldProps: { valueKey: 'id', labelKey: 'name' },
                         fieldsViewProps, formContext,
                         options: subcategories,
                         // onChange: (a,b,c)=>{console.log('a,b,c', a)},
                         val: getValues(fieldsDataConfig.adSubCategory.name)
                     }}/>}</>}
                     {activeStep == 1 && <>
-                        {attributes?.map(a=>{
-                            const {options, name, id} = a
-                            const opts = _.map(options, (i, ind) =>({id: ind, name: i}))
-                            const FIELD_NAME = ATTRIBUTES + '.' + id
-                            return <div key={id}>
-                                <SelectCategory {...{
-                                    fieldsData: {name: FIELD_NAME, label: name},
-                                    fieldsViewProps, formContext,
-                                    // onChange: () => {;console.log('getValues()',getValues() );clearErrors()},
-                                    val: getValues(FIELD_NAME),
-                                    options: opts}}/>
-                            </div>
-
-                        })}
+                        {attributes?.map(a => generateField({...a, formContext, getValues}))}
                     </>
                     }
                     {activeStep == 2 && <>
@@ -186,8 +179,15 @@ const EditAd = ({ad={}, update= false}:any) => {
                     }
 
                     {activeStep == 3 && <>
-                        <TextFieldElement {...fieldsDataConfig.city} {...fieldsViewProps} fullWidth/>
-                        <CheckboxElement {...fieldsDataConfig.adShipment} />
+                        <Stack mb={4}>
+                            <TextFieldElement {...fieldsDataConfig.city} {...fieldsViewProps} fullWidth/>
+
+                            <CheckboxElement {...fieldsDataConfig.adShipment}/>
+                            <CheckboxElement {...fieldsDataConfig.adShipmentCity}/>
+                            <CheckboxElement {...fieldsDataConfig.adShipmentRu}/>
+                            <CheckboxElement {...fieldsDataConfig.adShipmentSng}/>
+                            <CheckboxElement {...fieldsDataConfig.adShipmentW}/>
+                        </Stack>
                         <Box  style={{position: 'relative'}}  >
                             <Button variant='outlined' sx={{marginBottom: 2}} onClick={()=>{
                                 clearErrors()
@@ -238,8 +238,8 @@ export { EditAd };
 // }
 
 const SelectCategory = (props) => {
-    const {fieldsData, fieldsViewProps, options: opts, val, onChange, formContext} = props
-    const {getValues} = formContext;
+    const {fieldsData, fieldsViewProps, textFieldProps, options: opts, val, onChange, formContext,autocompleteProps, ...other} = props
+    const {getValues, clearErrors} = formContext;
     const [value, setValue] = React.useState(val);
 
     useEffect(()=>{
@@ -247,12 +247,11 @@ const SelectCategory = (props) => {
     }, [val])
 
     return <AutocompleteElement
+        {...other}
         rules={{required: true}}
         {...fieldsData}   fullWidth
         options={_.keys(opts)}
         textFieldProps = {{
-            valueKey: 'id',
-            labelKey: 'name',
             ...fieldsViewProps,
             // InputProps:{
             //     startAdornment: (
@@ -275,7 +274,10 @@ const SelectCategory = (props) => {
             }}
         autocompleteProps={{
             onChange: (a,b,c) => {
-                setValue(opts[b]?.id || null)
+                const key = textFieldProps?.valueKey || 'id';
+                const val = opts[b] ? opts[b][key] : null;
+                setValue( val)
+                clearErrors()
                 // console.log('getValues(),b,c', getValues(),b,opts[b])
                 if(onChange) onChange(opts[b])
             },
@@ -285,4 +287,55 @@ const SelectCategory = (props) => {
                     <Box>{opts[b]?.name}</Box>
                 </Stack>);
             }}}/>
+}
+
+function generateField (props){
+    const {type, options, name, id, formContext, getValues} = props
+    let field
+    const FIELD_NAME = ATTRIBUTES + '.' + id
+    switch (type){
+        case 'checkbox' : {
+            // console.log('options', getValues(ATTRIBUTES[FIELD_NAME+'-d']))
+            field = <Dioptries {...{options, name, fieldName: FIELD_NAME, getValues}}/>
+            break;
+        }
+        case 'select' :
+        case 'list' : {
+            // const {options, name, id} = a
+            const opts = _.map(options, (i, ind) =>({id: ind, name: i}))
+            field=(<div key={id}>
+                <SelectCategory {...{
+                    fieldsData: {name: FIELD_NAME, label: name},
+                    fieldsViewProps, formContext,
+                    textFieldProps: { valueKey: 'name', labelKey: 'name' },
+                    // onChange: (a) => {console.log('a', a)},
+                    val: getValues(FIELD_NAME),
+                    options: opts}}/>
+            </div>)
+
+            break;
+        }
+    }
+    return field
+}
+
+const Dioptries = (props) => {
+    const { name, fieldName, options, getValues} = props
+    const [checked, setChecked] = useState(false);
+    const opts = _.map(options, (o) => +o)
+    const marks = _.map(options, (o) => ({value: o, label: o}))
+    // console.log('opts', opts)
+    return <>
+        <CheckboxElement {...{
+            name: 'dioptries', label: name, checked,
+            onChange: () => {
+                setChecked(!checked)
+            }
+        }}/>
+        <SliderElement {...{
+            name: fieldName, label: '', type: 'number',
+            disabled: !getValues('dioptries'), marks: marks,
+            min: _.min(opts), max: _.max(opts), step: 0.5, defaultValue: 0
+        }}/>
+    </>
 }

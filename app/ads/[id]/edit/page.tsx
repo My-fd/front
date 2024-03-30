@@ -5,14 +5,8 @@ import {notFound} from "next/navigation";
 
 export default async function MyAds({params:{id}}) {
 
-  const ad = await  API.getAd(id)
-      .then((r)=>{
-        return r.data
-      })
-      .catch((r)=>{
-        return notFound();
-      })
+  // const ad = await
   return (
-      <EditAd ad={ad.data} update/>
+      <EditAd id={id} update/>
   );
 }

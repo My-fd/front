@@ -28,7 +28,7 @@ interface IProps{
     ad:IAd;
 }
 
-const Ad = (props:IProps) => {
+const AdPage = (props:IProps) => {
     const {title, description, price, id, isMy, isAd=false} = props.ad;
     // const { data: sessionData } = useSession()
     const { data: sessionData }:any = useSession<any>()
@@ -41,13 +41,13 @@ const Ad = (props:IProps) => {
         })
     }
 
-    const baseSize = 300;
+    const baseSize = '100%';
     const photoSize = {xs: '100vw', md: baseSize }
     const categoryIconSize = 50,
         categoryIconStyles = {position:'absolute', bottom: -categoryIconSize/2, left: categoryIconSize/2, background:'#fff',
             borderRadius: categoryIconSize, border: `2px solid ${theme.palette.primary['main']}`,width: categoryIconSize, height:categoryIconSize, padding: '5px'}
 
-    return (!deleted ? <Paper sx={{width:cardWidth, maxWidth: baseSize, marginX: 'auto'}}>
+    return (!deleted ? <Paper sx={{width:'100%', marginX: 'auto'}}>
         <Box sx={{maxWidth: baseSize, maxHeight: baseSize, width:photoSize, height:photoSize, position:'relative', background: '#ddd', marginX:'auto'}}>
             photo
             <Box sx={categoryIconStyles} >
@@ -56,21 +56,19 @@ const Ad = (props:IProps) => {
         </Box>
         <Box padding={4}>
             <Box sx={{ minHeight: !isAd ? 100 : 0, mb: !isAd ? 0 : 2}}>
-            <NextLink href={(isMy ? ROUTES.myAds.path : ROUTES.ads.path)  + '/' + id}>
+                <Typography variant="h6" sx={{color:'#222', fontWeight: 800}} display="block" gutterBottom>
+                    {price} р.
+                </Typography>
                 <Typography variant="button" gutterBottom sx={{color:'#222', fontWeight: 800, pb: 6}}>
                     {title}
                 </Typography>
-            </NextLink>
+                <Typography variant={"subtitle1"}>Москва</Typography>(самовывоз, доставка по городу, доставка по россии, доставка по снг)
             </Box>
             {isAd && <Typography variant="body1" gutterBottom sx={{mb:2}}>
                 {description}
             </Typography>}
             <Stack direction={"row"} justifyContent={"space-between"}>
-                <Typography variant="h6" sx={{color:'#222', fontWeight: 800}} display="block" gutterBottom>
-                    {price} р.
-                </Typography>
                 <Box>
-                    <Typography variant={"subtitle1"}>Москва</Typography>
                     <Typography variant={"caption"} color={'#888'}>12.12.2012</Typography>
                 </Box>
             </Stack>
@@ -88,4 +86,4 @@ const Ad = (props:IProps) => {
     </Paper>: null)
 };
 
-export { Ad };
+export { AdPage };

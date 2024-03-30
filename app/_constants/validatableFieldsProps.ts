@@ -8,13 +8,17 @@ export const VALIDATABL_EFIELDS_PROPS:any = {
     pass:          {   name: 'password',               label: 'Пароль',                     helperText: ' ', type: '',       },
     passR:         {   name: 'password_confirmation',  label: 'Повторите пароль',           helperText: ' ', type: '',       },
     phone:         {   name: 'phone',                  label: 'Телефон',                    helperText: ' ', type: '',       },
-    city:          {   name: 'city',                   label: 'Город',                      helperText: ' ', type: '',       },
+    city:          {   name: 'city',                   label: 'Город',                      helperText: 'Укажите где находится товар', type: '',       },
     adName:        {   name: 'title',                  label: 'Название',                   helperText: ' ', type: '',       },
     adCategory:    {   name: 'category_id',            label: 'Категория',                  helperText: ' ', type: '',       },
     adSubCategory: {   name: 'subcategory_id',         label: 'Подкатегория',               helperText: ' ', type: '',       },
     adDescription: {   name: 'description',            label: 'Описание',                   helperText: ' ', type: '',       },
     adPrice:       {   name: 'price',                  label: 'Цена',                       helperText: ' ', type: 'number', },
-    adShipment:    {   name: 'shipment',               label: 'Пересылка в другой город',   helperText: ' ' },
+    adShipment:    {   name: 'shipment',               label: 'Самовывоз',                  helperText: '' },
+    adShipmentCity:{   name: 'shipment_city',          label: 'Доставка по городу',         helperText: '' },
+    adShipmentRu:  {   name: 'shipment_ru',            label: 'Доставка по России',         helperText: '' },
+    adShipmentSng: {   name: 'shipment_sng',           label: 'Доставка в страны СНГ',      helperText: '' },
+    adShipmentW:   {   name: 'shipment_w',             label: 'Доставка по всему миру',     helperText: '' },
 }
 
 const maxLength = 64, aboutLength = 1024, emailLength = 255;
@@ -120,7 +124,7 @@ export function getFieldsConfig(fields=[], options={validationRules: {}}){
         const severName = VALIDATABL_EFIELDS_PROPS[f].name
         config.serverNames[f] = severName
         config.defaultValues[severName] = FIELDS_DEFAULT_VALUES[f]
-        config.fieldsConfig[f] = {...VALIDATABL_EFIELDS_PROPS[f], validation: VALIDATION_RULES[f], ...options.validationRules}
+        config.fieldsConfig[f] = {...VALIDATABL_EFIELDS_PROPS[f], validation: VALIDATION_RULES[f] || {}, ...options.validationRules}
     })
     return config
 }

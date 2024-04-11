@@ -10,15 +10,15 @@ export const VALIDATABL_EFIELDS_PROPS:any = {
     phone:         {   name: 'phone',                  label: 'Телефон',                    helperText: ' ', type: '',       },
     city:          {   name: 'city',                   label: 'Город',                      helperText: 'Укажите где находится товар', type: '',       },
     adName:        {   name: 'title',                  label: 'Название',                   helperText: ' ', type: '',       },
-    adCategory:    {   name: 'category_id',            label: 'Категория',                  helperText: ' ', type: '',       },
-    adSubCategory: {   name: 'subcategory_id',         label: 'Подкатегория',               helperText: ' ', type: '',       },
+    adCategory:    {   name: 'parent_id',              label: 'Категория',                  helperText: ' ', type: '',       },
+    adSubCategory: {   name: 'category_id',            label: 'Подкатегория',               helperText: ' ', type: '',       },
     adDescription: {   name: 'description',            label: 'Описание',                   helperText: ' ', type: '',       },
     adPrice:       {   name: 'price',                  label: 'Цена',                       helperText: ' ', type: 'number', },
-    adShipment:    {   name: 'shipment',               label: 'Самовывоз',                  helperText: '' },
-    adShipmentCity:{   name: 'shipment_city',          label: 'Доставка по городу',         helperText: '' },
-    adShipmentRu:  {   name: 'shipment_ru',            label: 'Доставка по России',         helperText: '' },
-    adShipmentSng: {   name: 'shipment_sng',           label: 'Доставка в страны СНГ',      helperText: '' },
-    adShipmentW:   {   name: 'shipment_w',             label: 'Доставка по всему миру',     helperText: '' },
+    adShipmentSelf:{   name: 'shipment.self',          label: 'Самовывоз',                  helperText: '' },
+    adShipmentCity:{   name: 'shipment.city',          label: 'по городу',         helperText: '' },
+    adShipmentRu:  {   name: 'shipment.ru',            label: 'по России',         helperText: '' },
+    adShipmentSng: {   name: 'shipment.sng',           label: 'в страны СНГ',      helperText: '' },
+    adShipmentW:   {   name: 'shipment.w',             label: 'по всему миру',     helperText: '' },
 }
 
 const maxLength = 64, aboutLength = 1024, emailLength = 255;

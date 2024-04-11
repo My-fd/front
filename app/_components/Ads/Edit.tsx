@@ -15,6 +15,7 @@ import {useSession} from "next-auth/react";
 import {ROUTES} from "../../../configs/routs";
 import {NAVIGATION_FIELDS_NAMES} from "../../_constants/fieldsNames";
 import {useRouter} from "next/navigation";
+import {convertCategories} from "../../../utils/utils";
 // import {createAd} from "../../../data/dummies";
 
 
@@ -22,7 +23,7 @@ const FORM_FIELDS_NAMES = ['city', 'adName', 'adCategory', 'adSubCategory', 'adD
 const ATTRIBUTES = 'attributes'
 const FORM_CONFIG = {..._.merge({},
     getFieldsConfig(FORM_FIELDS_NAMES, {validationRules: {required: true}}),
-    getFieldsConfig(['adShipment','adShipmentCity','adShipmentRu', 'adShipmentSng','adShipmentW']))
+    getFieldsConfig(['adShipmentSelf','adShipmentCity','adShipmentRu', 'adShipmentSng','adShipmentW']))
 }
 const fieldsDataConfig:any = {
     ...FORM_CONFIG.fieldsConfig,
@@ -36,7 +37,7 @@ const EditAd = ({ad={}, update= false}:any) => {
     const { data: sessionData }:any = useSession()
     const  router = useRouter()
     const [categories, setCategories] = useState<any>([]);
-    const formContext = useForm<any>({defaultValues: { ...FORM_CONFIG.defaultValues, ...ad, category_id:ad?.category?.id}});
+    const formContext = useForm<any>({defaultValues: { ...FORM_CONFIG.defaultValues, ...ad, parent_id: ad?.category?.parent_id, category_id:ad?.category?.id}});
     const { handleSubmit, clearErrors, formState: {errors, isValid}, setError, setValue, trigger,getValues, watch, reset} = formContext;
     const watchCategory = watch(FORM_CONFIG.fieldsConfig.adCategory.name);
     const watchSubcategory = watch(FORM_CONFIG.fieldsConfig.adSubCategory.name);
@@ -44,16 +45,10 @@ const EditAd = ({ad={}, update= false}:any) => {
     const [subcategories, setSubcategories] = useState([]);
 
     useEffect(()=>{
+        // console.log('ad', ad)
         API.getCategories()
             .then(({ data }) => {
-                let cat = {}
-                _.map(data.data, (i)=>{
-                    if(!i.parent_id) cat[i.id] = {...(cat[i.id]||{}), ...i}
-                    if(!!i.parent_id) cat[i.parent_id].subcategories = _.concat((cat[i.parent_id].subcategories || []), i)
-                })
-                // setCategories(_.values(cat))
-
-                setCategories(cat)
+                setCategories(data.data)
                 return data.response;
             })
             .catch((res) => {
@@ -62,7 +57,7 @@ const EditAd = ({ad={}, update= false}:any) => {
     }, []);
 
     useEffect(()=>{
-        const subcategories = categories[watchCategory]?.subcategories
+        const subcategories = categories[watchCategory]?.subcategory
         // console.log('categories', categories)
         setValue(fieldsDataConfig.adSubCategory.name, undefined);
         setSubcategories(subcategories)
@@ -72,6 +67,8 @@ const EditAd = ({ad={}, update= false}:any) => {
 
     useEffect(()=>{
         if (!subcategories || !watchSubcategory) return
+        // console.log('subcategories', subcategories)
+
         setValue(ATTRIBUTES, []);
         const attributes = (subcategories[watchSubcategory] || {})[ATTRIBUTES];
         setAttributes(attributes)
@@ -80,18 +77,20 @@ const EditAd = ({ad={}, update= false}:any) => {
     const validAction = async (data) => {
         const {token} = sessionData?.user
         const attrs = _.transform(data[ATTRIBUTES], (r ,v,k)=> {
-            if (v) r.push({[k]: v})
+            if (v) r[`attributes['${String(k)}']`]= _.find(attributes, {id:k}).options[v]
             return r
-        },[])
-        const serverData = {..._.pick(data, _.concat(_.values(FORM_CONFIG.serverNames), 'id')),
-            [ATTRIBUTES]:attrs,
+        },{})
+        const serverData = {..._.pick(data, _.concat(_.values(FORM_CONFIG.serverNames), 'id', 'shipment')),
+        ...attrs,
+            category_id: subcategories[watchSubcategory].id,
+            parent_id: subcategories[watchSubcategory].parent_id,
             token}
-
+        console.log('serverData', serverData)
         // return true
         const res = update ? API.updateAd(serverData): API.createAd(serverData);
         res.then(({data}) => {
                 const goTo = ROUTES.myAds.path
-                router.push(goTo);
+                // router.push(goTo);
             return data.data;
         })
             .catch((res) => {
@@ -182,7 +181,7 @@ const EditAd = ({ad={}, update= false}:any) => {
                         <Stack mb={4}>
                             <TextFieldElement {...fieldsDataConfig.city} {...fieldsViewProps} fullWidth/>
 
-                            <CheckboxElement {...fieldsDataConfig.adShipment}/>
+                            <CheckboxElement {...fieldsDataConfig.adShipmentSelf}/>
                             <CheckboxElement {...fieldsDataConfig.adShipmentCity}/>
                             <CheckboxElement {...fieldsDataConfig.adShipmentRu}/>
                             <CheckboxElement {...fieldsDataConfig.adShipmentSng}/>
@@ -278,7 +277,8 @@ const SelectCategory = (props) => {
                 const val = opts[b] ? opts[b][key] : null;
                 setValue( val)
                 clearErrors()
-                // console.log('getValues(),b,c', getValues(),b,opts[b])
+
+                console.log('getValues(),b,c', getValues(),b,opts[b])
                 if(onChange) onChange(opts[b])
             },
             renderOption:(a,b) => {

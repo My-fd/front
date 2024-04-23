@@ -8,3 +8,26 @@ export function convertCategories (categories){
     })
     return cat
 }
+
+export async function convertFileToBase64(files) {
+    const filePromises = files.map((file, i) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = async () => {
+                try {
+                    resolve(reader.result);
+                } catch (err) {
+                    reject(err);
+                }
+            };
+            reader.onerror = (error) => {
+                reject(error);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+
+    const fileInfos = await Promise.all(filePromises);
+
+    return fileInfos;
+};

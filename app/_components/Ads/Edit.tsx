@@ -8,15 +8,12 @@ import {FormContainer, AutocompleteElement, TextFieldElement, CheckboxElement, S
 import {Box, Button, Chip, Paper, Stack, Step, StepLabel, Stepper, Typography} from "@mui/material";
 import { getFieldsConfig, VALIDATABL_EFIELDS_PROPS } from "../../_constants/validatableFieldsProps";
 import {API} from "../../api/api";
-import {profilePaperSx} from "../../../styles/styles";
 import * as React from "react";
-// import {CostumeIcon, MakeupIcons, WigIcon, ClothesIcon, CraftIcon} from "../Icons";
 import {useSession} from "next-auth/react";
 import {ROUTES} from "../../../configs/routs";
-import {NAVIGATION_FIELDS_NAMES} from "../../_constants/fieldsNames";
 import {useRouter} from "next/navigation";
-import {convertCategories} from "../../../utils/utils";
-// import {createAd} from "../../../data/dummies";
+import {AdPhotoUploader} from "../PhotoUploader/AdPhotoUploader";
+import {convertFileToBase64} from "../../../utils/utils";
 
 
 const FORM_FIELDS_NAMES = ['city', 'adName', 'adCategory', 'adSubCategory', 'adDescription', 'adPrice']
@@ -33,7 +30,7 @@ const fieldsViewProps = {sx: {marginBottom: 2, minHeight: 80}}
 
 const formName:any = 'editAdForm'
 
-const EditAd = ({ad={}, update= false}:any) => {
+const EditAd = ({ad={}, id, update= false}:any) => {
     const { data: sessionData }:any = useSession()
     const  router = useRouter()
     const [categories, setCategories] = useState<any>([]);
@@ -43,6 +40,7 @@ const EditAd = ({ad={}, update= false}:any) => {
     const watchSubcategory = watch(FORM_CONFIG.fieldsConfig.adSubCategory.name);
     const [attributes, setAttributes] = useState([]);
     const [subcategories, setSubcategories] = useState([]);
+    const [images, setImages] = useState();
 
     useEffect(()=>{
         // console.log('ad', ad)
@@ -77,13 +75,15 @@ const EditAd = ({ad={}, update= false}:any) => {
     const validAction = async (data) => {
         const {token} = sessionData?.user
         const attrs = _.transform(data[ATTRIBUTES], (r ,v,k)=> {
-            if (v) r[`attributes['${String(k)}']`]= _.find(attributes, {id:k}).options[v]
+            if (v) r[`attributes[${String(k)}]`]= _.find(attributes, {id:k}).options[v]
             return r
         },{})
         const serverData = {..._.pick(data, _.concat(_.values(FORM_CONFIG.serverNames), 'id', 'shipment')),
         ...attrs,
+            images: convertImages(images),
             category_id: subcategories[watchSubcategory].id,
             parent_id: subcategories[watchSubcategory].parent_id,
+            id: ad.id,
             token}
         console.log('serverData', serverData)
         // return true
@@ -108,7 +108,14 @@ const EditAd = ({ad={}, update= false}:any) => {
 
     const invalidAction = (err, e) => {console.log('invalidAction', errors )}
 
-    /////////////////////////stepper
+    const convertImages = (files) => {
+        const t = convertFileToBase64(files)
+
+        // @ts-ignore
+        t.then( a=> setImages(_.mapKeys(a, (v, k)=> ('images['+k+']'))))// eslint-disable-line no-use-before-define
+    }
+
+        /////////////////////////stepper
     const steps = [
         '', '','',''//'Выберете подходящие категории','Опишите лот','Доставка'
     ]
@@ -131,8 +138,11 @@ const EditAd = ({ad={}, update= false}:any) => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
+    const cardWidth = {width: {xs: '100%', md: 800}}
+    const mainBoxStyles = {margin: '0 auto', ...cardWidth};
+    const photoBoxStyles = {margin: '24px auto 0', border:'0 solid rgba(120,120,120, 0.2)', padding: 1, borderWidth: '1px 1px 0 1px'};
 
-    return  (<Box sx={{margin: '24px auto', width: {xs: '100%', md: '400px'}}}>
+    return  (<Box sx={mainBoxStyles}>
             <Stepper activeStep={activeStep}>
                 {steps.map((label, index) => {
                     const isActive = _.indexOf(steps,label) == activeStep;
@@ -147,33 +157,38 @@ const EditAd = ({ad={}, update= false}:any) => {
                     );
                 })}
             </Stepper>
-            <Paper sx={profilePaperSx}>
-                <FormContainer 
-                    formContext={formContext} handleSubmit={handleSubmit((data, e) => validAction(data), (err, e) => invalidAction(err, e))}>
+            {!!categories.length && <FormContainer
+                formContext={formContext}
+                handleSubmit={handleSubmit((data, e) => validAction(data), (err, e) => invalidAction(err, e))}>
+                {activeStep == 0 && <Box sx={photoBoxStyles}>
+                    <AdPhotoUploader imgs={images} onChange={(imgs) => setImages(imgs)}/>
+                </Box>}
+                <Paper sx={{padding: 4, ...cardWidth}}>
                     {activeStep == 0 && <>
                         <TextFieldElement {...fieldsDataConfig.adName} {...fieldsViewProps} fullWidth/>
                         <SelectCategory {...{
-                        fieldsData: fieldsDataConfig.adCategory,
-                        textFieldProps: { valueKey: 'id', labelKey: 'name' },
-                        fieldsViewProps, formContext,
-                        options: categories,
-                        val: getValues(fieldsDataConfig.adCategory.name)
-                    }}/>
-                    {!!subcategories?.length && <SelectCategory {...{
-                        fieldsData: fieldsDataConfig.adSubCategory,
-                        textFieldProps: { valueKey: 'id', labelKey: 'name' },
-                        fieldsViewProps, formContext,
-                        options: subcategories,
-                        // onChange: (a,b,c)=>{console.log('a,b,c', a)},
-                        val: getValues(fieldsDataConfig.adSubCategory.name)
-                    }}/>}</>}
+                            fieldsData: fieldsDataConfig.adCategory,
+                            textFieldProps: {valueKey: 'id', labelKey: 'name'},
+                            fieldsViewProps, formContext,
+                            options: categories,
+                            val: getValues(fieldsDataConfig.adCategory.name)
+                        }}/>
+                        {!!subcategories?.length && <SelectCategory {...{
+                            fieldsData: fieldsDataConfig.adSubCategory,
+                            textFieldProps: {valueKey: 'id', labelKey: 'name'},
+                            fieldsViewProps, formContext,
+                            options: subcategories,
+                            // onChange: (a,b,c)=>{console.log('a,b,c', a)},
+                            val: getValues(fieldsDataConfig.adSubCategory.name)
+                        }}/>}</>}
                     {activeStep == 1 && <>
                         {attributes?.map(a => generateField({...a, formContext, getValues}))}
                     </>
                     }
                     {activeStep == 2 && <>
-                        <TextFieldElement {...fieldsDataConfig.adDescription} multiline {...fieldsViewProps} fullWidth />
-                        <TextFieldElement {...fieldsDataConfig.adPrice} {...fieldsViewProps} sx={{lineHeight: 1.1, fontSize: 13}} fullWidth />
+                        <TextFieldElement {...fieldsDataConfig.adDescription} multiline {...fieldsViewProps} fullWidth/>
+                        <TextFieldElement {...fieldsDataConfig.adPrice} {...fieldsViewProps}
+                                          sx={{lineHeight: 1.1, fontSize: 13}} fullWidth/>
                     </>
                     }
 
@@ -187,23 +202,32 @@ const EditAd = ({ad={}, update= false}:any) => {
                             <CheckboxElement {...fieldsDataConfig.adShipmentSng}/>
                             <CheckboxElement {...fieldsDataConfig.adShipmentW}/>
                         </Stack>
-                        <Box  style={{position: 'relative'}}  >
-                            <Button variant='outlined' sx={{marginBottom: 2}} onClick={()=>{
+                        <Box style={{position: 'relative'}}>
+                            <Button variant='outlined' sx={{marginBottom: 2}} onClick={() => {
                                 clearErrors()
                             }} color={'primary'} size={"large"} fullWidth> отменить </Button>
                             <Button
                                 disabled={!!_.keys(errors).length && !isValid}
-                                variant='contained' type={'submit'} color={'primary'} size={"large"} fullWidth> сохранить </Button>
-                            <ErrorMessage errors={errors} name={formName} render={({ message }) =>{
-                                return <Typography  color={'error'}  variant="caption" display="block" gutterBottom> {!!_.keys(errors).length && !isValid ? message : ''}</Typography>}}/>
+                                variant='contained' type={'submit'} color={'primary'} size={"large"}
+                                fullWidth> сохранить </Button>
+                            {process.env.NODE_ENV == 'development' && <Button
+                                onClick={() => {
+                                    trigger()
+                                    reset(undefined, {keepDirtyValues: true});
+                                }}
+                                variant='contained' color={'primary'} size={"large"}
+                                fullWidth> reeval </Button>}
+                            <ErrorMessage errors={errors} name={formName} render={({message}) => {
+                                return <Typography color={'error'} variant="caption" display="block"
+                                                   gutterBottom> {!!_.keys(errors).length && !isValid ? message : ''}</Typography>
+                            }}/>
 
                         </Box>
                     </>}
 
+                </Paper>
 
-
-                </FormContainer>
-        </Paper>
+            </FormContainer>}
             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
                 <Button
                     color="inherit"

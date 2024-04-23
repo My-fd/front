@@ -1,0 +1,19 @@
+.image-gallery-bullet {
+  border: 1px solid #7862E4 !important;
+  background-color: #fff !important;
+  box-shadow: none !important;
+  &.active, &:focus, &:hover{
+    background-color: #7862E4 !important;
+    border: 1px solid #fff !important;
+  }
+  &.active{
+    zoom: 1.5;
+
+  }
+}
+
+.image-gallery-thumbnail {
+  &.active, &:focus, &:hover {
+    border: 3px solid #7862E4;
+  }
+}

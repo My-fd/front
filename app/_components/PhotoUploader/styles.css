@@ -1,0 +1,18 @@
+.fui-fullscreen-container{
+  background: rgba(200,200,200, 0.75) !important;
+}
+
+.fui-fullscreen-relative-container{
+  background: #fff !important;
+}
+
+.filesui-file-item-size
+, .files-ui-file-mosaic-file-name
+{
+  display: none!important;
+}
+
+.ReactCrop, .ReactCrop__child-wrapper, .ReactCrop__child-wrapper>img{
+  height: inherit;
+  line-height: inherit;
+}

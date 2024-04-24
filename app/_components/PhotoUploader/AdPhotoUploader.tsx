@@ -102,7 +102,7 @@ export  function AdPhotoUploader({onChange=null, imgs=[]}) {
                         />
                     </Grid>
                 ))}
-                {extFiles.length && dropZoneConfig.maxFiles > extFiles.length
+                {!!extFiles.length && dropZoneConfig.maxFiles > extFiles.length
                     && <Grid item xs={1}  sx={{display: 'flex', flexWrap: 'wrap', alignContent: 'space-between', justifyContent: 'space-around', width: previewStyles, height: previewStyles, padding: 3}}>
                         <FileInputButton onChange={(files) => setExtFiles(_.concat(extFiles, files))}
                                          variant="text"

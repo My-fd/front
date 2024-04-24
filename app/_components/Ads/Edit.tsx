@@ -40,7 +40,8 @@ const EditAd = ({ad={}, id, update= false}:any) => {
     const watchSubcategory = watch(FORM_CONFIG.fieldsConfig.adSubCategory.name);
     const [attributes, setAttributes] = useState([]);
     const [subcategories, setSubcategories] = useState([]);
-    const [images, setImages] = useState();
+    const [images, setImages] = useState([]);
+    const [serverDataImages, setserverDataImages] = useState();
 
     useEffect(()=>{
         // console.log('ad', ad)
@@ -72,6 +73,14 @@ const EditAd = ({ad={}, id, update= false}:any) => {
         setAttributes(attributes)
     }, [watchSubcategory, subcategories])
 
+    useEffect(()=>{
+        if(!images?.length) return
+        const t = convertFileToBase64(images)
+
+        // @ts-ignore
+        t.then( a=> setserverDataImages(_.mapKeys(a, (v, k)=> ('images['+k+']'))))// eslint-disable-line no-use-before-define
+
+    }, [images])
     const validAction = async (data) => {
         const {token} = sessionData?.user
         const attrs = _.transform(data[ATTRIBUTES], (r ,v,k)=> {
@@ -80,24 +89,27 @@ const EditAd = ({ad={}, id, update= false}:any) => {
         },{})
         const serverData = {..._.pick(data, _.concat(_.values(FORM_CONFIG.serverNames), 'id', 'shipment')),
         ...attrs,
-            images: convertImages(images),
+            ...serverDataImages,
             category_id: subcategories[watchSubcategory].id,
             parent_id: subcategories[watchSubcategory].parent_id,
             id: ad.id,
             token}
-        console.log('serverData', serverData)
+        // console.log('serverData', serverData, serverDataImages)
         // return true
         const res = update ? API.updateAd(serverData): API.createAd(serverData);
         res.then(({data}) => {
                 const goTo = ROUTES.myAds.path
                 // router.push(goTo);
-            return data.data;
+            return data;
         })
             .catch((res) => {
                 const {response} = res
                 let errors = [] ;
-                // if (!response) return
-                errors = [{name: formName, message: response.data.message}]
+                if (!response) {
+                    errors = [{name: formName, message: 'Что-то пошло не так. Попробуйте обновить страницу' }]
+                    return
+                }
+                errors = [{name: formName, message: response?.data?.message}]
                 if (response.status == 401) errors = [{name: formName, message: 'Ошибка авторизации. Попробуйте обновить страницу' }]
                 if (response.status == 422) errors = _.map(_.toPairs(response.data.errors),(i:Array<any>) => ({name:i[0],  message: _.flatten(i[1]) }))
                 errors.map(({ name, message }) => {
@@ -107,13 +119,6 @@ const EditAd = ({ad={}, id, update= false}:any) => {
     };
 
     const invalidAction = (err, e) => {console.log('invalidAction', errors )}
-
-    const convertImages = (files) => {
-        const t = convertFileToBase64(files)
-
-        // @ts-ignore
-        t.then( a=> setImages(_.mapKeys(a, (v, k)=> ('images['+k+']'))))// eslint-disable-line no-use-before-define
-    }
 
         /////////////////////////stepper
     const steps = [
@@ -140,10 +145,10 @@ const EditAd = ({ad={}, id, update= false}:any) => {
 
     const cardWidth = {width: {xs: '100%', md: 800}}
     const mainBoxStyles = {margin: '0 auto', ...cardWidth};
-    const photoBoxStyles = {margin: '24px auto 0', border:'0 solid rgba(120,120,120, 0.2)', padding: 1, borderWidth: '1px 1px 0 1px'};
+    const photoBoxStyles = {margin: '0 auto', border:'0 solid rgba(120,120,120, 0.2)', padding: 1, borderWidth: '1px 1px 0 1px'};
 
     return  (<Box sx={mainBoxStyles}>
-            <Stepper activeStep={activeStep}>
+            <Stepper activeStep={activeStep} sx={{paddingBottom: 3}}>
                 {steps.map((label, index) => {
                     const isActive = _.indexOf(steps,label) == activeStep;
                     const stepProps: { completed?: boolean } = {};

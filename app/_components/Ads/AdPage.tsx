@@ -24,6 +24,8 @@ import {API} from "../../api/api";
 import theme from "../../../styles/theme/theme";
 import Button from "@mui/material/Button";
 import Grid2 from "@mui/material/Unstable_Grid2";
+import {AdPageGallery} from "../Gallery/AdPage";
+import * as React from "react";
 
 
 interface IAd{
@@ -78,7 +80,7 @@ const dummie = {
 
 const AdPage = (props:IProps) => {
     // eslint-disable-next-line no-use-before-define
-    const { isMy, city, title,description, price,updated_at, shipment, id, attributes , categories, category, subcategory_id, user:{nickname}} = _.merge({}, {...dummie}, {...props.ad});
+    const { images, isMy, city, title,description, price,updated_at, shipment, id, attributes , categories, category, subcategory_id, user:{nickname}} = _.merge({}, {...dummie}, {...props.ad});
     // const {title, description, price, id, isMy, isAd=false} = props.ad;
     const { data: sessionData }:any = useSession<any>()
     const [deleted, setDeleted] = useState(false);
@@ -98,8 +100,8 @@ const AdPage = (props:IProps) => {
     return (!deleted ? <Grid container spacing={4}>
         <Grid item xs={12} lg={8}>
             <Paper sx={{width:'100%', maxWidth:{xs: 600, lg: 'unset'}, marginX: 'auto'}}>
-                <Box sx={{maxWidth: baseSize, maxHeight: baseSize, width:photoSize, height:photoSize, position:'relative', background: '#ddd', marginX:'auto'}}>
-                    photo
+                <Box sx={{maxWidth: baseSize, maxHeight: baseSize, width:photoSize, height: {...photoSize, md: 300}, position:'relative', borderBottom: '1px solid #ddd', marginX:'auto'}}>
+                    {images.length && <AdPageGallery imgs={images}/>}
                     <Box sx={categoryIconStyles} >
                         <BrushOutlinedIcon sx={{fontSize: 35, width: 35, height: 35}} color={'primary'}/>
                     </Box>

@@ -37,6 +37,7 @@ interface IAd{
     isAd: boolean,
     categories: any,
     category: any,
+    images: any,
 }
 
 interface IProps{
@@ -60,6 +61,7 @@ const dummie = {
     user:{
         nickname: 'FAKE Alexander',
     },
+    images:[],
     "attributes": [
         {
             "10": "FAKE Новое"

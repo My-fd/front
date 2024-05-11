@@ -163,11 +163,15 @@ const CatalogAdsList = (props) => {
 
                     {_.map(watchAll, (v, k) => {
                             if (!v || !_.compact(v)) return null
-                            if (k == 'price') { // @ts-ignore
-                                return <Chip label={'Цена'} color={'primary'} size={'small'} onDelete={() => setValue(k)}/>
-                            }
-                            return _.map(v, fv => <Chip label={fv} color={'primary'} size={'small'}
-                                                 onDelete={() => setValue(k, _.without(v, fv))}/>)
+                            // @ts-ignore
+                        if (k == 'price' || k == 3) return <Chip label={`${k == 3 ? 'Диоптрии ' : 'Цена '} от ${_.min(v)} до ${_.max(v)}`} color={'primary'} size={'small'} onDelete={() => setValue(k)}/>
+
+                        // @ts-ignore
+                        return _.isObject(v) ?
+                             _.map(v, fv => {// @ts-ignore
+                                 return <Chip label={ fv } color={'primary'} size={'small'} onDelete={() => setValue(k, _.without(v, fv))}/>
+                             })// @ts-ignore
+                            : <Chip label={v} color={'primary'} size={'small'} onDelete={() => setValue(k)}/>
                         }
                     )}
                 </Stack>
@@ -205,11 +209,11 @@ const GetFilterElementByType = (props) => {
     switch (type){
         case 'range':
         case 'checkbox': {
-            formContext.setValue(String(id), [Number(_.min(options)),Number(_.max(options))])
+            // formContext.setValue(String(id), [Number(_.min(options)),Number(_.max(options))])
             return <Box sx={{width: '100%', paddingTop: 4, paddingRight: 4, paddingLeft: 2}}><SliderElement {...{
                 name: String(id), label: '', type: 'number', valueLabelDisplay: 'on',
                 marks: _.map(options, (o) => ({value: Number(o), label: o})),
-                min: Number(_.min(options)), max: Number(_.max(options)), step: 0.5, defaultValue: 0
+                min: Number(_.min(options)), max: Number(_.max(options)), step: 0.5, defaultValue: [Number(_.min(options)),Number(_.max(options))]
             }}/></Box>
         }
 

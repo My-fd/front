@@ -1,7 +1,6 @@
 "use client";
 
 import {Paper, Typography} from "@mui/material";
-import {cardWidth} from "../../../styles/styles";
 import {ROUTES} from "../../../configs/routs";
 import EditIcon from '@mui/icons-material/Edit';
 import Link from "next/link";
@@ -30,7 +29,6 @@ interface IProps{
 
 const AdCard = (props:IProps) => {
     const {title, description, price, id, isMy, isAd=false} = props.ad;
-    // const { data: sessionData } = useSession()
     const { data: sessionData }:any = useSession<any>()
     const [deleted, setDeleted] = useState(false);
 
@@ -42,13 +40,13 @@ const AdCard = (props:IProps) => {
     }
 
     const baseSize = 300;
-    const photoSize = {xs: '100vw', md: baseSize }
+    const photoSize = {xs: '100vw', md: '100%' }
     const categoryIconSize = 50,
         categoryIconStyles = {position:'absolute', bottom: -categoryIconSize/2, left: categoryIconSize/2, background:'#fff',
             borderRadius: categoryIconSize, border: `2px solid ${theme.palette.primary['main']}`,width: categoryIconSize, height:categoryIconSize, padding: '5px'}
 
-    return (!deleted ? <Paper sx={{width:cardWidth, maxWidth: baseSize, marginX: 'auto'}}>
-        <Box sx={{maxWidth: baseSize, maxHeight: baseSize, width:photoSize, height:photoSize, position:'relative', background: '#ddd', marginX:'auto'}}>
+    return (!deleted ? <Paper sx={{width:'100%', maxWidth: 400, marginX: 'auto'}}>
+        <Box sx={{ maxHeight: baseSize, width:'100%', height:photoSize, position:'relative', background: '#ddd', marginX:'auto'}}>
             photo
             <Box sx={categoryIconStyles} >
                 <BrushOutlinedIcon sx={{fontSize: 35, width: 35, height: 35}} color={'primary'}/>

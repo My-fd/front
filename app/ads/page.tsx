@@ -1,5 +1,6 @@
-import {AdsList} from "../_components/Ads/AdsList";
+import {CatalogAdsList} from "../_components/Ads/CatalogAdsList";
 import {API} from "../api/api";
+import {Suspense} from "react";
 
 export default async function AdsPage() {
   let err
@@ -12,5 +13,5 @@ export default async function AdsPage() {
         err =  res
       })
 
-  return !err ? <AdsList ads={adsPage}/> : <div>ошибка загрузки списка объявлений</div>
+    return !err ? <Suspense><CatalogAdsList ads={adsPage}/></Suspense> : <div>ошибка загрузки списка объявлений</div>
 }

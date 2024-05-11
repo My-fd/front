@@ -1,3 +1,14 @@
+export const IconByCategoryId = ({id, ...other}) => {
+    const ICONS_MAP = {
+        12: <MakeupIcons {...other}/>,
+        13: <CostumeIcon {...other}/>,
+        14: <WigIcon {...other}/>,
+        15: <ClothesIcon {...other}/>,
+        16: <CraftIcon {...other}/>,
+    }
+    return  ICONS_MAP[id]
+}
+
 export const MakeupIcons = ({fill="white", width="315", height="315", viewBox="0 0 315 315"}) =>{
     return <svg width={width} height={height} viewBox={viewBox} fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M167.486 300.234H147.509C99.535 300.234 54.7115 284.228 17.886 253.944L11.6353 261.548C50.2474 293.294 97.2316 310.078 147.513 310.078H167.491C217.768 310.078 264.753 293.299 303.36 261.553L297.109 253.949C260.283 284.228 215.455 300.234 167.486 300.234Z" fill={fill}/>

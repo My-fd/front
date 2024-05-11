@@ -2,18 +2,18 @@
 
 import _ from "lodash";
 import {useEffect, useState} from "react";
-import {useForm} from "react-hook-form";
-import { ErrorMessage } from "@hookform/error-message"
-import {FormContainer, AutocompleteElement, TextFieldElement, CheckboxElement, SliderElement} from 'react-hook-form-mui'
-import {Box, Button, Chip, Paper, Stack, Step, StepLabel, Stepper, Typography} from "@mui/material";
-import { getFieldsConfig, VALIDATABL_EFIELDS_PROPS } from "../../_constants/validatableFieldsProps";
-import {API} from "../../api/api";
 import * as React from "react";
 import {useSession} from "next-auth/react";
-import {ROUTES} from "../../../configs/routs";
 import {useRouter} from "next/navigation";
-import {AdPhotoUploader} from "../PhotoUploader/AdPhotoUploader";
+import {useForm} from "react-hook-form";
+import {FormContainer, AutocompleteElement, TextFieldElement, CheckboxElement, SliderElement} from 'react-hook-form-mui'
+import { ErrorMessage } from "@hookform/error-message"
+import {Box, Button, Chip, Paper, Stack, Step, StepLabel, Stepper, Typography} from "@mui/material";
+import {API} from "../../api/api";
+import {ROUTES} from "../../../configs/routs";
+import { getFieldsConfig, VALIDATABL_EFIELDS_PROPS } from "../../_constants/validatableFieldsProps";
 import {convertFileToBase64} from "../../../utils/utils";
+import {AdPhotoUploader} from "../PhotoUploader/AdPhotoUploader";
 
 
 const FORM_FIELDS_NAMES = ['city', 'adName', 'adCategory', 'adSubCategory', 'adDescription', 'adPrice']
@@ -69,7 +69,7 @@ const EditAd = ({ad={}, id, update= false}:any) => {
         // console.log('subcategories', subcategories)
 
         setValue(ATTRIBUTES, []);
-        const attributes = (subcategories[watchSubcategory] || {})[ATTRIBUTES];
+        const attributes = (subcategories[watchSubcategory] || {})['attributes'];
         setAttributes(attributes)
     }, [watchSubcategory, subcategories])
 
@@ -83,12 +83,13 @@ const EditAd = ({ad={}, id, update= false}:any) => {
     }, [images])
     const validAction = async (data) => {
         const {token} = sessionData?.user
-        const attrs = _.transform(data[ATTRIBUTES], (r ,v,k)=> {
+        const attrs = _.transform(data.attributes, (r ,v,k)=> {
             if (v) r[`attributes[${String(k)}]`]= _.find(attributes, {id:k}).options[v]
             return r
         },{})
         const serverData = {..._.pick(data, _.concat(_.values(FORM_CONFIG.serverNames), 'id', 'shipment')),
         ...attrs,
+            // @ts-ignore
             ...serverDataImages,
             category_id: subcategories[watchSubcategory].id,
             parent_id: subcategories[watchSubcategory].parent_id,
@@ -323,6 +324,7 @@ function generateField (props){
     let field
     const FIELD_NAME = ATTRIBUTES + '.' + id
     switch (type){
+        case 'range' :
         case 'checkbox' : {
             // console.log('options', getValues(ATTRIBUTES[FIELD_NAME+'-d']))
             field = <Dioptries {...{options, name, fieldName: FIELD_NAME, getValues}}/>
